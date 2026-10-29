@@ -1,6 +1,8 @@
-#include "include/coolest_array.h"
+#include "coolest_array.h"
 #include <string.h>
 #include <stdlib.h>
+
+/* error checking needs to be added but we ball */
 
 Coolest_Array* ca_create(size_t data_size) {
 
