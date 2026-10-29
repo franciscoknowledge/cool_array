@@ -33,7 +33,14 @@ void ca_free(Coolest_Array* a);
     value: what to put in the array
 */
 
+/* haha how did we not have a get function before?
 #define ca_append(ca, type, value) _ca_append_internal((ca), &(type){value})
 #define ca_get(ca, type, at) (((type*)(ca)->data)[at])
 #define ca_set(ca, type, at, value) _ca_set_internal((ca), (at), &(type){value})
 #define ca_insert(ca, type, at, value) _ca_insert_internal((ca), (at), &(type){value})
+*/
+
+#define ca_append(ca, type, ...) _ca_append_internal((ca), (type[]){__VA_ARGS__})
+#define ca_insert(ca, type, at, ...) _ca_insert_internal((ca), (at), ((type)[]){__VA_ARGS__})
+#define ca_set(ca, type, at, ...) _ca_set_internal((ca), (at), ((type)[]){__VA_ARGS__})
+#define ca_get(ca, type, at) (((type*)(ca)->data)[(at)])
