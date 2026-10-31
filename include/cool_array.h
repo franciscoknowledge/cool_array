@@ -2,6 +2,13 @@
 
 #include <stddef.h>
 
+/*
+    it would be nice to pass the size of element via the macros to the internal functions,
+    to catch differing data sizes
+
+    ca_get has no bounds checks and can't return an error code sooo i guess that has to be investigated
+*/
+
 typedef enum {
 
     CA_ERROR_YAY = 0, /* no error */
@@ -33,9 +40,9 @@ Cool_Array* ca_create(size_t data_size);
 
 /* -- mostly internal use -- */
 
-Ca_Error ca_set_internal(Cool_Array* a, size_t at, void* src);
-Ca_Error ca_append_internal(Cool_Array* a, void* src);
-Ca_Error ca_insert_internal(Cool_Array* a, size_t at, void* src);
+Ca_Error ca_set_internal(Cool_Array* a, size_t at, const void* src);
+Ca_Error ca_append_internal(Cool_Array* a, const void* src);
+Ca_Error ca_insert_internal(Cool_Array* a, size_t at, const void* src);
 
 /* -- usage & macros -- */
 
@@ -54,5 +61,5 @@ void ca_free(Cool_Array* a);
 
 #define ca_append(ca, type, ...) ca_append_internal((ca), (type[]){__VA_ARGS__})
 #define ca_insert(ca, type, at, ...) ca_insert_internal((ca), (at), ((type)[]){__VA_ARGS__})
-#define ca_set(ca, type, at, ...) ca_set_internal((ca), (at), ((type)[]){__VA_ARGS__})
+#define ca_set(ca, type, at, ...) ca_set_internal((ca), (at), (type)[]){__VA_ARGS__})
 #define ca_get(ca, type, at) (((type*)(ca)->data)[(at)])

@@ -62,7 +62,7 @@ static Ca_Error ca_grow_if_needed(Cool_Array* a) {
     
 }
 
-Ca_Error ca_set_internal(Cool_Array* a, size_t at, void* src) {
+Ca_Error ca_set_internal(Cool_Array* a, size_t at, const void* src) {
 
     if (a == NULL || src == NULL)
         return CA_ERROR_NULL;
@@ -75,7 +75,7 @@ Ca_Error ca_set_internal(Cool_Array* a, size_t at, void* src) {
 
 }
 
-Ca_Error ca_append_internal(Cool_Array* a, void* src) {
+Ca_Error ca_append_internal(Cool_Array* a, const void* src) {
 
     if (a == NULL || src == NULL)
         return CA_ERROR_NULL;
@@ -91,7 +91,7 @@ Ca_Error ca_append_internal(Cool_Array* a, void* src) {
 
 }
 
-Ca_Error ca_insert_internal(Cool_Array* a, size_t at, void* src) {
+Ca_Error ca_insert_internal(Cool_Array* a, size_t at, const void* src) {
 
     if (a == NULL || src == NULL)
         return CA_ERROR_NULL;
