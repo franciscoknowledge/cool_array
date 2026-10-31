@@ -4,6 +4,40 @@
 #include <string.h>
 #include <stdlib.h>
 
+static Ca_Error ca_set_capacity(Cool_Array* a, size_t new_capacity) {
+
+    if (new_capacity > SIZE_MAX / a->data_size)
+        return CA_ERROR_OVERFLOW;
+
+    char* new_data = realloc(a->data, new_capacity * a->data_size);
+    if (!new_data)
+        return CA_ERROR_ALLOC_FAIL;
+
+    a->data = new_data;
+    a->capacity = new_capacity;
+
+    return CA_ERROR_YAY;
+
+}
+
+static Ca_Error ca_grow(Cool_Array* a) {
+
+    if (a->capacity > SIZE_MAX / 2)
+        return CA_ERROR_OVERFLOW;
+
+    return ca_set_capacity(a, a->capacity * 2);
+
+}
+
+static Ca_Error ca_grow_if_needed(Cool_Array* a) {
+
+    if (a->size < a->capacity)
+        return CA_ERROR_YAY;
+
+    return ca_grow(a);
+    
+}
+
 Cool_Array* ca_create(size_t data_size) {
 
     if (data_size == 0)
@@ -30,59 +64,6 @@ Cool_Array* ca_create(size_t data_size) {
 
     return new;
 
-}
-
-static Ca_Error ca_set_capacity(Cool_Array* a, size_t new_capacity) {
-
-    if (new_capacity > SIZE_MAX / a->data_size)
-        return CA_ERROR_OVERFLOW;
-
-    char* new_data = realloc(a->data, new_capacity * a->data_size);
-    if (!new_data)
-        return CA_ERROR_ALLOC_FAIL;
-
-    a->data = new_data;
-    a->capacity = new_capacity;
-
-    return CA_ERROR_YAY;
-
-}
-
-static Ca_Error ca_grow(Cool_Array* a) {
-
-    if (a->capacity > SIZE_MAX / 2)
-        return CA_ERROR_OVERFLOW;
-
-    return ca_set_capacity(a, a->capacity * 2);
-
-    /*
-    if (a->capacity > SIZE_MAX / 2)
-        return CA_ERROR_OVERFLOW;
-
-    size_t new_capacity = a->capacity * 2;
-
-    if (new_capacity > (SIZE_MAX / a->data_size))
-        return CA_ERROR_OVERFLOW;
-
-    char* new_data = realloc(a->data, a->capacity * a->data_size * 2);
-    if (!new_data)
-        return CA_ERROR_ALLOC_FAIL;
-
-    a->data = new_data;
-    a->capacity = new_capacity;
-
-    return CA_ERROR_YAY;
-    */
-
-}
-
-static Ca_Error ca_grow_if_needed(Cool_Array* a) {
-
-    if (a->size < a->capacity)
-        return CA_ERROR_YAY;
-
-    return ca_grow(a);
-    
 }
 
 Ca_Error ca_set_internal(Cool_Array* a, size_t at, const void* src) {
@@ -162,59 +143,6 @@ Ca_Error ca_get_safe(const Cool_Array* a, size_t at, void* output) {
 
 }
 
-void ca_free(Cool_Array* a) {
-
-    if (a == NULL)
-        return;
-
-    free(a->data);
-    free(a);
-
-}
-
-size_t ca_size(const Cool_Array* a) {
-
-    return a->size;
-
-}
-
-size_t ca_capacity(const Cool_Array* a) {
-
-    return a->capacity;
-
-}
-
-size_t ca_last_index(const Cool_Array* a) {
-
-    return (a->size != 0) ? (a->size - 1) : 0;
-
-}
-
-bool ca_is_empty(const Cool_Array* a) {
-
-    return (a->size == 0);
-
-}
-
-Ca_Error ca_trim(Cool_Array* a) {
-
-    if (a == NULL)
-        return CA_ERROR_NULL;
-
-    size_t new_capacity = (a->size != 0) ? a->size : 1;
-    if (new_capacity == a->capacity)
-        return CA_ERROR_YAY;
-
-    return ca_set_capacity(a, new_capacity);
-
-}
-
-void ca_clear(Cool_Array* a) {
-
-    a->size = 0;
-
-}
-
 Ca_Error ca_swap(Cool_Array* a, size_t pos_1, size_t pos_2) {
 
     if (a == NULL)
@@ -228,12 +156,13 @@ Ca_Error ca_swap(Cool_Array* a, size_t pos_1, size_t pos_2) {
 
     char* p1 = a->data + pos_1 * a->data_size;
     char* p2 = a->data + pos_2 * a->data_size;
+    char tmp;
 
     /* swap bytes around since theyre char pointers */
     /* avoid the use of temporary buffer i guess */
     for (size_t i = 0; i < a->data_size; i++) {
 
-        char tmp = p1[i];
+        tmp = p1[i];
 
         p1[i] = p2[i];
         p2[i] = tmp;
@@ -280,5 +209,58 @@ Ca_Error ca_resize(Cool_Array* a, size_t new_size) {
 
     a->size = new_size;
     return CA_ERROR_YAY;
+
+}
+
+Ca_Error ca_trim(Cool_Array* a) {
+
+    if (a == NULL)
+        return CA_ERROR_NULL;
+
+    size_t new_capacity = (a->size != 0) ? a->size : 1;
+    if (new_capacity == a->capacity)
+        return CA_ERROR_YAY;
+
+    return ca_set_capacity(a, new_capacity);
+
+}
+
+size_t ca_size(const Cool_Array* a) {
+
+    return a->size;
+
+}
+
+size_t ca_capacity(const Cool_Array* a) {
+
+    return a->capacity;
+
+}
+
+size_t ca_last_index(const Cool_Array* a) {
+
+    return (a->size != 0) ? (a->size - 1) : 0;
+
+}
+
+bool ca_is_empty(const Cool_Array* a) {
+
+    return (a->size == 0);
+
+}
+
+void ca_free(Cool_Array* a) {
+
+    if (a == NULL)
+        return;
+
+    free(a->data);
+    free(a);
+
+}
+
+void ca_clear(Cool_Array* a) {
+
+    a->size = 0;
 
 }
