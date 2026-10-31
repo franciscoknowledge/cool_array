@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "include/coolest_array.h"
+#include "include/cool_array.h"
 
 typedef struct {
 
@@ -40,8 +40,8 @@ int main(void) {
 
     };
 
-    Coolest_Array* struct_array = ca_create(sizeof(Test_Struct));
-    _ca_append_internal(struct_array, &test);
+    Cool_Array* struct_array = ca_create(sizeof(Test_Struct));
+    ca_append_internal(struct_array, &test);
     ca_append(struct_array, Test_Struct, test_2);
     ca_append(struct_array, Test_Struct, {.x = -255, .y = -1.250, .z = 'A', .str = "aaaaaaAAAAAA"});
 
