@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+/* -- internal usage stuff -- */
+
 static Ca_Error ca_set_capacity(Cool_Array* a, size_t new_capacity) {
 
     if (new_capacity > SIZE_MAX / a->data_size)
@@ -37,6 +39,8 @@ static Ca_Error ca_grow_if_needed(Cool_Array* a) {
     return ca_grow(a);
     
 }
+
+/* ---- */
 
 Cool_Array* ca_create(size_t data_size) {
 
@@ -156,13 +160,11 @@ Ca_Error ca_swap(Cool_Array* a, size_t pos_1, size_t pos_2) {
 
     char* p1 = a->data + pos_1 * a->data_size;
     char* p2 = a->data + pos_2 * a->data_size;
-    char tmp;
 
     /* swap bytes around since theyre char pointers */
-    /* avoid the use of temporary buffer i guess */
     for (size_t i = 0; i < a->data_size; i++) {
 
-        tmp = p1[i];
+        char tmp = p1[i];
 
         p1[i] = p2[i];
         p2[i] = tmp;

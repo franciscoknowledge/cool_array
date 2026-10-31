@@ -1,0 +1,1 @@
+gcc -std=c99 -Wall -Wextra -pedantic -g -I. main.c include\*.c -o main.exe && main.exe > test.awesome
