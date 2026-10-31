@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdbool.h>
 
 /*
     it would be nice to pass the size of element via the macros to the internal functions,
@@ -26,6 +27,10 @@ typedef enum {
         return error;
 */
 
+/* 
+    TODO: swap, resize, reserve, pop, back, front, reverse
+*/
+
 typedef struct {
 
     char* data;
@@ -37,20 +42,33 @@ typedef struct {
 
 /* caller should free ; returns null on allocation failures */
 Cool_Array* ca_create(size_t data_size);
+void ca_free(Cool_Array* a);
 
 /* -- mostly internal use -- */
 
 Ca_Error ca_set_internal(Cool_Array* a, size_t at, const void* src);
 Ca_Error ca_append_internal(Cool_Array* a, const void* src);
 Ca_Error ca_insert_internal(Cool_Array* a, size_t at, const void* src);
+Ca_Error ca_remove(Cool_Array* a, size_t at);
+Ca_Error ca_get_safe(Cool_Array* a, size_t at, void* output); /* just in case i guess */
 
 /* -- usage & macros -- */
 
-Ca_Error ca_remove(Cool_Array* a, size_t at);
+/* checks */
 
-/* -- to free -- */
+size_t ca_size(Cool_Array* a);
+size_t ca_capacity(Cool_Array* a);
+size_t ca_last_index(Cool_Array* a);
 
-void ca_free(Cool_Array* a);
+bool ca_is_empty(Cool_Array* a);
+
+/* some operations */
+
+/* shrink capacity to size */
+Ca_Error ca_trim(Cool_Array* a);
+
+/* nuke all elements but keep capacity */
+void ca_clear(Cool_Array* a);
 
 /*
     ca: pointer to cool_array

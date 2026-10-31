@@ -135,6 +135,19 @@ Ca_Error ca_remove(Cool_Array* a, size_t at) {
 
 }
 
+Ca_Error ca_get_safe(Cool_Array* a, size_t at, void* output) {
+
+    if (a == NULL || output == NULL)
+        return CA_ERROR_NULL;
+
+    if (at >= a->size)
+        return CA_ERROR_INDEX;
+
+    memcpy(output, a->data + at * a->data_size, a->data_size);
+    return CA_ERROR_YAY;
+
+}
+
 void ca_free(Cool_Array* a) {
 
     if (a == NULL)
@@ -142,5 +155,55 @@ void ca_free(Cool_Array* a) {
 
     free(a->data);
     free(a);
+
+}
+
+size_t ca_size(Cool_Array* a) {
+
+    return a->size;
+
+}
+
+size_t ca_capacity(Cool_Array* a) {
+
+    return a->capacity;
+
+}
+
+size_t ca_last_index(Cool_Array* a) {
+
+    return (a->size != 0) ? (a->size - 1) : 0;
+
+}
+
+bool ca_is_empty(Cool_Array* a) {
+
+    return (a->size == 0);
+
+}
+
+Ca_Error ca_trim(Cool_Array* a) {
+
+    size_t new_capacity = (a->size != 0) ? a->size : 1;
+    if (new_capacity == a->capacity)
+        return CA_ERROR_YAY;
+
+    char* new_data = realloc(a->data, new_capacity * a->data_size);
+    if (new_data == NULL)
+        return CA_ERROR_ALLOC_FAIL;
+
+    a->capacity = new_capacity;
+    a->data = new_data;
+
+    return CA_ERROR_YAY;
+
+}
+
+void ca_clear(Cool_Array* a) {
+
+    /* memset here is kinda useless since stuff past size cant be accessed but....... ill do it anyways */
+
+    a->size = 0;
+    memset(a->data, 0, a->size * a->data_size);
 
 }

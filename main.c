@@ -20,34 +20,11 @@ void print_test_struct(Test_Struct* ts) {
 
 int main(void) {
 
-    /* this leaks the string lol */
+    Cool_Array* int_array = ca_create(sizeof(int));
+    for (size_t i = 1; i <= 12000; i++)
+        ca_append(int_array, int, (int)i);        
 
-    Test_Struct test = {
-
-        .x = 9999,
-        .y = 0.1111,
-        .z = '!',
-        .str = "abc",
-
-    };
-
-    Test_Struct test_2 = {
-
-        .x = 112,
-        .y = -0.28213,
-        .z = '?',
-        .str = "ghghg",
-
-    };
-
-    Cool_Array* struct_array = ca_create(sizeof(Test_Struct));
-    ca_append_internal(struct_array, &test);
-    ca_append(struct_array, Test_Struct, test_2);
-    ca_append(struct_array, Test_Struct, {.x = -255, .y = -1.250, .z = 'A', .str = "aaaaaaAAAAAA"});
-
-    for (size_t i = 0; i < struct_array->size; i++)
-        print_test_struct(&ca_get(struct_array, Test_Struct, i));
-
-    ca_free(struct_array);
+    for (size_t i = 0; i < (int_array->size - 1); i++)
+        printf("[%zu] = %d\n", i, ca_get(int_array, int, i));
 
 }
