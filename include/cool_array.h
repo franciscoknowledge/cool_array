@@ -1,7 +1,23 @@
 #pragma once
 
 #include <stddef.h>
-#include <stdbool.h>
+
+typedef enum {
+
+    CA_ERROR_YAY = 0, /* no error */
+    CA_ERROR_NULL, /* null passed as argument */
+    CA_ERROR_INDEX, /* index out of range*/
+    CA_ERROR_ALLOC_FAIL, /* out of memory / allocation fail */
+    CA_ERROR_OVERFLOW, /* would overflow if more memory was allocated for array */
+
+} Ca_Error;
+
+/*
+    intention is to check errors like this, since CA_ERROR_YAY is 0:
+    Ca_Error error = ca_remove(a, 1);
+    if (error)
+        return error;
+*/
 
 typedef struct {
 
@@ -17,13 +33,16 @@ Cool_Array* ca_create(size_t data_size);
 
 /* -- mostly internal use -- */
 
-void ca_set_internal(Cool_Array* a, size_t at, void* src);
-void ca_append_internal(Cool_Array* a, void* src);
-void ca_insert_internal(Cool_Array* a, size_t at, void* src);
+Ca_Error ca_set_internal(Cool_Array* a, size_t at, void* src);
+Ca_Error ca_append_internal(Cool_Array* a, void* src);
+Ca_Error ca_insert_internal(Cool_Array* a, size_t at, void* src);
 
 /* -- usage & macros -- */
 
-void ca_remove(Cool_Array* a, size_t at);
+Ca_Error ca_remove(Cool_Array* a, size_t at);
+
+/* -- to free -- */
+
 void ca_free(Cool_Array* a);
 
 /*
