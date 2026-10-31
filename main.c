@@ -20,11 +20,6 @@ void print_test_struct(Test_Struct* ts) {
 
 int main(void) {
 
-    Cool_Array* int_array = ca_create(sizeof(int));
-    for (size_t i = 1; i <= 12000; i++)
-        ca_append(int_array, int, (int)i);        
-
-    for (size_t i = 0; i < (int_array->size - 1); i++)
-        printf("[%zu] = %d\n", i, ca_get(int_array, int, i));
+    return 0;
 
 }
