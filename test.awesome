@@ -249,3 +249,20 @@ access error code 2 of pos 0
 size: 0
 cap: 1
 last i: 0
+refill:
+[0] = 0
+[1] = 110
+[2] = 220
+[3] = 330
+[4] = 440
+[5] = 550
+[6] = 660
+[7] = 770
+[8] = 880
+[9] = 990
+size: 10
+cap: 16
+last i: 9
+int_array: 0000026346d414e0
+thats enough. be free!
+finally: 0000000000000000

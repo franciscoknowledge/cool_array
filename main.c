@@ -99,6 +99,21 @@ int main(void) {
     printf("trim\n");
     ca_trim(int_array);
     print_int_array_hehe(int_array);
+
+    printf("refill:\n");
+    for (size_t i = 0; i < 10; i++)
+        ca_append(int_array, int, i * 100 + i * 10);
+
+    print_int_array_hehe(int_array);
+
+    printf("int_array: %p\n", (void*)int_array);
+    printf("thats enough. be free!\n");
+
+    ca_free(int_array);
+    int_array = NULL;
+
+    printf("finally: %p\n", (void*)int_array);
+
     return 0;
 
 }
