@@ -224,18 +224,19 @@ int main(void) {
     es_reset(errors);
     print("\nresize test:");
 
-        print("set to 20:");
+        /* resize to 20 */
         es_add_error(errors, ca_resize(int_array, 20));
         print_int_array(int_array);
 
-        print("set to 5:");
+        /* resize to 5 */
         es_add_error(errors, ca_resize(int_array, 5));
+        
         es_add_error(errors, ca_resize(NULL, 100));
 
-        print("try to overflow");
+        /* attempt overflow */
         es_add_error(errors, ca_resize(int_array, SIZE_MAX));
 
-        print("try to create allocate failure");
+        /* try to cause allocation fail (too much crap) */
         es_add_error(errors, ca_resize(int_array, SIZE_MAX / sizeof(int)));
 
         es_print_errors(errors);

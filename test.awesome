@@ -121,7 +121,6 @@ is empty: 0
 ----
 
 resize test:
-set to 20:
 -- int_array --
 [0] = 9000
 [1] = 9500
@@ -149,9 +148,6 @@ capacity: 20
 last index: 19
 is empty: 0
 ----
-set to 5:
-try to overflow
-try to create allocate failure
 errors:
 >CA_ERROR_YAY
 >CA_ERROR_YAY

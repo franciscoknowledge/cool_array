@@ -7,7 +7,7 @@ typedef enum {
 
     CA_ERROR_YAY = 0,    /* no error */
     CA_ERROR_NULL,       /* null passed as argument */
-    CA_ERROR_INDEX,      /* index out of range*/
+    CA_ERROR_INDEX,      /* index out of range */
     CA_ERROR_ALLOC_FAIL, /* out of memory / allocation fail */
     CA_ERROR_OVERFLOW,   /* would overflow if more memory was allocated for array */
 
