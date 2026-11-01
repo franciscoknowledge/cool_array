@@ -18,9 +18,7 @@ const char* ca_get_error_string(Ca_Error error) {
         case CA_ERROR_ALLOC_FAIL: return "CA_ERROR_ALLOC_FAIL";
         case CA_ERROR_OVERFLOW: return "CA_ERROR_OVERFLOW";
 
-        /* fallthrough! */
-        case CA_ERROR_COUNT_:
-            break;
+        case CA_ERROR_COUNT_: break;
 
     }
 
