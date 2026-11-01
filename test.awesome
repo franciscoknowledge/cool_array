@@ -1,12 +1,15 @@
 is the error printing stuff working ? 
 no errors to print
 created arrays
+is the tiny_array NULL?: 1
+
 append test:
 errors:
 >CA_ERROR_YAY
 >CA_ERROR_YAY
 >CA_ERROR_NULL
 >CA_ERROR_NULL
+>CA_ERROR_OVERFLOW
 -- int_array --
 [0] = 100
 [1] = 200
@@ -36,6 +39,12 @@ is empty: 0
 ----
 
 insert test:
+errors:
+>CA_ERROR_YAY
+>CA_ERROR_YAY
+>CA_ERROR_INDEX
+>CA_ERROR_NULL
+>CA_ERROR_NULL
 -- int_array --
 [0] = 9000
 [1] = 9000
@@ -49,6 +58,11 @@ is empty: 0
 ----
 
 remove test:
+errors:
+>CA_ERROR_YAY
+>CA_ERROR_YAY
+>CA_ERROR_INDEX
+>CA_ERROR_NULL
 -- int_array --
 [0] = 9000
 [1] = 9500
@@ -60,6 +74,12 @@ is empty: 0
 ----
 
 safe get test:
+errors:
+>CA_ERROR_YAY
+>CA_ERROR_INDEX
+>CA_ERROR_INDEX
+>CA_ERROR_NULL
+>CA_ERROR_NULL
 -- int_array --
 [0] = 9000
 [1] = 9500
@@ -71,6 +91,11 @@ is empty: 0
 ----
 
 swap test:
+errors:
+>CA_ERROR_YAY
+>CA_ERROR_INDEX
+>CA_ERROR_INDEX
+>CA_ERROR_NULL
 -- int_array --
 [0] = 9500
 [1] = 9000
@@ -82,6 +107,9 @@ is empty: 0
 ----
 
 reverse test:
+errors:
+>CA_ERROR_YAY
+>CA_ERROR_NULL
 -- int_array --
 [0] = 9000
 [1] = 9500
@@ -122,6 +150,14 @@ last index: 19
 is empty: 0
 ----
 set to 5:
+try to overflow
+try to create allocate failure
+errors:
+>CA_ERROR_YAY
+>CA_ERROR_YAY
+>CA_ERROR_NULL
+>CA_ERROR_OVERFLOW
+>CA_ERROR_ALLOC_FAIL
 -- int_array --
 [0] = 9000
 [1] = 9500
@@ -136,6 +172,9 @@ is empty: 0
 ----
 
 trim test:
+errors:
+>CA_ERROR_YAY
+>CA_ERROR_NULL
 -- int_array --
 [0] = 9000
 [1] = 9500

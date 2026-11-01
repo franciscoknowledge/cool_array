@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -87,8 +88,12 @@ int main(void) {
 
     int get_output = 0;
 
+    size_t temp_size;
+    size_t temp_capacity;
+
     Cool_Array* int_array = ca_create(sizeof(int));
     Cool_Array* empty_array = ca_create(sizeof(char));
+    Cool_Array* tiny_array = ca_create(0);
 
     /* just so i dont need to use the pointer every time */
     Error_Storage* errors = malloc(sizeof(Error_Storage));
@@ -99,15 +104,30 @@ int main(void) {
     es_print_errors(errors); /* nothing should print here */
 
     print("created arrays");
+    print("is the tiny_array NULL?: %d", (tiny_array == NULL));
 
     /* append test */
 
-    print("append test:");
-
+    print("\nappend test:");
+        
         es_add_error(errors, ca_append_internal(int_array, &ints[0]));
         es_add_error(errors, ca_append_internal(int_array, &ints[1]));
         es_add_error(errors, ca_append_internal(int_array, NULL));
         es_add_error(errors, ca_append_internal(NULL, &ints[0]));
+
+        /* try to trigger overflow error in the capacity > SIZE_MAX / 2 check with ca_grow*/
+
+        temp_size = int_array->size;
+        temp_capacity = int_array->capacity;
+
+        int_array->capacity = SIZE_MAX / 2 + 1;
+        int_array->size = int_array->capacity;
+
+        /* should be an overflow */
+        es_add_error(errors, ca_append_internal(int_array, &ints[0]));
+
+        int_array->capacity = temp_capacity;
+        int_array->size = temp_size;
 
         es_print_errors(errors);
 
@@ -140,6 +160,8 @@ int main(void) {
         es_add_error(errors, ca_insert_internal(int_array, 0, NULL));
         es_add_error(errors, ca_insert_internal(NULL, 0, &ints_again[0]));
 
+        es_print_errors(errors);
+
     print_int_array(int_array);
 
     /* remove test */
@@ -151,6 +173,8 @@ int main(void) {
         es_add_error(errors, ca_remove(int_array, int_array->size - 1));
         es_add_error(errors, ca_remove(int_array, 999));
         es_add_error(errors, ca_remove(NULL, int_array->size - 1));
+
+        es_print_errors(errors);
 
     print_int_array(int_array);
 
@@ -164,6 +188,8 @@ int main(void) {
         es_add_error(errors, ca_get_safe(int_array, 999, &get_output));
         es_add_error(errors, ca_get_safe(NULL, 0, &get_output));
         es_add_error(errors, ca_get_safe(int_array, 0, NULL));
+
+        es_print_errors(errors);
     
     print_int_array(int_array);
 
@@ -177,6 +203,8 @@ int main(void) {
         es_add_error(errors, ca_swap(int_array, 0, 9999));
         es_add_error(errors, ca_swap(NULL, 0, 1));
 
+        es_print_errors(errors);
+
     print_int_array(int_array);
 
     /* reverse test */
@@ -186,6 +214,8 @@ int main(void) {
 
         es_add_error(errors, ca_reverse(int_array));
         es_add_error(errors, ca_reverse(NULL));
+
+        es_print_errors(errors);
 
     print_int_array(int_array);
 
@@ -202,6 +232,14 @@ int main(void) {
         es_add_error(errors, ca_resize(int_array, 5));
         es_add_error(errors, ca_resize(NULL, 100));
 
+        print("try to overflow");
+        es_add_error(errors, ca_resize(int_array, SIZE_MAX));
+
+        print("try to create allocate failure");
+        es_add_error(errors, ca_resize(int_array, SIZE_MAX / sizeof(int)));
+
+        es_print_errors(errors);
+
     print_int_array(int_array);
 
     /* trim test */
@@ -211,6 +249,8 @@ int main(void) {
 
         es_add_error(errors, ca_trim(int_array));
         es_add_error(errors, ca_trim(NULL));
+
+        es_print_errors(errors);
 
     print_int_array(int_array);
 
@@ -239,5 +279,9 @@ int main(void) {
         ca_clear(int_array);
 
     print_int_array(int_array);
+
+    ca_free(int_array);
+    ca_free(empty_array);
+    free(errors);
 
 }
