@@ -11,6 +11,8 @@ typedef enum {
     CA_ERROR_ALLOC_FAIL, /* out of memory / allocation fail */
     CA_ERROR_OVERFLOW,   /* would overflow if more memory was allocated for array */
 
+    CA_ERROR_COUNT_, /* enum item count */
+
 } Ca_Error;
 
 typedef struct {
@@ -20,9 +22,15 @@ typedef struct {
 
 } Cool_Array;
 
+/* -- misc -- */
+
+/* get error string for each enum item. returns "CA_ERROR_UNKNOWN" for out of bounds input */
+const char* ca_get_error_string(Ca_Error error);
+
 /* -- creation -- */
 
-Cool_Array* ca_create(size_t data_size); /* caller should free ; returns null on allocation failures */
+/* caller should free ; returns null on allocation failures */
+Cool_Array* ca_create(size_t data_size);
 
 /* -- usage & macros -- */
 

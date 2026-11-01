@@ -4,6 +4,30 @@
 #include <string.h>
 #include <stdlib.h>
 
+/* -- misc -- */
+
+const char* ca_get_error_string(Ca_Error error) {
+
+    /* using a switch case here because the compiler warns of unhandled cases */
+
+    switch (error) {
+
+        case CA_ERROR_YAY: return "CA_ERROR_YAY";
+        case CA_ERROR_NULL: return "CA_ERROR_NULL";
+        case CA_ERROR_INDEX: return "CA_ERROR_INDEX";
+        case CA_ERROR_ALLOC_FAIL: return "CA_ERROR_ALLOC_FAIL";
+        case CA_ERROR_OVERFLOW: return "CA_ERROR_OVERFLOW";
+
+        /* fallthrough! */
+        case CA_ERROR_COUNT_:
+            break;
+
+    }
+
+    return "CA_ERROR_UNKNOWN";
+
+}
+
 /* -- internal usage stuff -- */
 
 static Ca_Error ca_set_capacity(Cool_Array* a, size_t new_capacity) {
@@ -229,11 +253,17 @@ Ca_Error ca_trim(Cool_Array* a) {
 
 size_t ca_size(const Cool_Array* a) {
 
+    if (a == NULL)
+        return 0;
+
     return a->size;
 
 }
 
 size_t ca_capacity(const Cool_Array* a) {
+
+    if (a == NULL)
+        return 0;
 
     return a->capacity;
 
@@ -241,11 +271,17 @@ size_t ca_capacity(const Cool_Array* a) {
 
 size_t ca_last_index(const Cool_Array* a) {
 
+    if (a == NULL)
+        return 0;
+
     return (a->size != 0) ? (a->size - 1) : 0;
 
 }
 
 bool ca_is_empty(const Cool_Array* a) {
+
+    if (a == NULL)
+        return true;
 
     return (a->size == 0);
 
@@ -262,6 +298,9 @@ void ca_free(Cool_Array* a) {
 }
 
 void ca_clear(Cool_Array* a) {
+
+    if (a == NULL)
+        return;
 
     a->size = 0;
 
