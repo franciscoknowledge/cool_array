@@ -20,25 +20,26 @@ typedef struct {
 
 void print_int_array(Cool_Array* a) {
 
-    print("-- int_array --");
+    printf("int array: [");
 
     for (size_t i = 0; i < ca_size(a); i++) {
 
-        print("[%zu] = %d", i, ca_get(a, int, i));
+        printf("%d", ca_get(a, int, i));
+        if (i + 1 < ca_size(a))
+            printf(",");
 
     }
 
-    print("\nsize: %zu", ca_size(a));
+    printf("]\n");
+
+    print("size: %zu", ca_size(a));
     print("capacity: %zu", ca_capacity(a));
     print("last index: %zu", ca_last_index(a));
     print("is empty: %d", ca_is_empty(a));
 
-    print("----");
-
 }
 
-/* this is all really bad yes but i just want something done fast */
-/* CA_ERROR_COUNT_ is just meant to indicate a "blank state". it will print unknown */
+/* CA_ERROR_COUNT_ is meant to indicate end */
 
 void es_print_errors(Error_Storage* es) {
 
@@ -51,15 +52,20 @@ void es_print_errors(Error_Storage* es) {
         
     }
 
-    print("errors:");
+    printf("errors: [");
 
     for (size_t i = 0; i < ERR_ARRAY_SIZE; i++) {
 
-        if (es->errors[i] >= CA_ERROR_COUNT_)
-            return;
+        if (es->errors[i] >= CA_ERROR_COUNT_) {
 
-        putchar('>');
-        print("%s", ca_get_error_string(es->errors[i]));
+            printf("]\n");
+            return;
+        
+        }
+
+        printf("%d", es->errors[i]);
+        if (!(es->errors[i + 1] >= CA_ERROR_COUNT_))
+            printf(",");
 
     }
 
@@ -98,17 +104,15 @@ int main(void) {
     /* just so i dont need to use the pointer every time */
     Error_Storage* errors = malloc(sizeof(Error_Storage));
 
-    print("is the error printing stuff working ? ");
+    print("~pre start tests:");
 
     es_reset(errors);
     es_print_errors(errors); /* nothing should print here */
-
-    print("created arrays");
-    print("is the tiny_array NULL?: %d", (tiny_array == NULL));
+    print("tiny_array == NULL: %d", (tiny_array == NULL));
 
     /* append test */
 
-    print("\nappend test:");
+    print("\n~append test:");
         
         es_add_error(errors, ca_append_internal(int_array, &ints[0]));
         es_add_error(errors, ca_append_internal(int_array, &ints[1]));
@@ -136,7 +140,7 @@ int main(void) {
     /* set test */
 
     es_reset(errors);
-    print("\nset test:");
+    print("\n~set test:");
 
         es_add_error(errors, ca_set_internal(int_array, 0, &ints_again[0]));
         es_add_error(errors, ca_set_internal(int_array, 1, &ints_again[4]));
@@ -152,7 +156,7 @@ int main(void) {
     /* insert test */
 
     es_reset(errors);
-    print("\ninsert test:");
+    print("\n~insert test:");
 
         es_add_error(errors, ca_insert_internal(int_array, 0, &ints_again[0]));
         es_add_error(errors, ca_insert_internal(int_array, 3, &ints[3]));
@@ -167,7 +171,7 @@ int main(void) {
     /* remove test */
 
     es_reset(errors);
-    print("\nremove test:");
+    print("\n~remove test:");
 
         es_add_error(errors, ca_remove(int_array, 0));
         es_add_error(errors, ca_remove(int_array, int_array->size - 1));
@@ -181,7 +185,7 @@ int main(void) {
     /* safe get test */
 
     es_reset(errors);
-    print("\nsafe get test:");
+    print("\n~safe get test:");
 
         es_add_error(errors, ca_get_safe(int_array, 0, &get_output));
         es_add_error(errors, ca_get_safe(int_array, 2, &get_output));
@@ -196,7 +200,7 @@ int main(void) {
     /* swap test */
 
     es_reset(errors);
-    print("\nswap test:");
+    print("\n~swap test:");
 
         es_add_error(errors, ca_swap(int_array, 0, 1));
         es_add_error(errors, ca_swap(int_array, 4, 2));
@@ -210,7 +214,7 @@ int main(void) {
     /* reverse test */
 
     es_reset(errors);
-    print("\nreverse test:");
+    print("\n~reverse test:");
 
         es_add_error(errors, ca_reverse(int_array));
         es_add_error(errors, ca_reverse(NULL));
@@ -222,7 +226,7 @@ int main(void) {
     /* resize test */
 
     es_reset(errors);
-    print("\nresize test:");
+    print("\n~resize test:");
 
         /* resize to 20 */
         es_add_error(errors, ca_resize(int_array, 20));
@@ -246,7 +250,7 @@ int main(void) {
     /* trim test */
 
     es_reset(errors);
-    print("\ntrim test:");
+    print("\n~trim test:");
 
         es_add_error(errors, ca_trim(int_array));
         es_add_error(errors, ca_trim(NULL));
@@ -258,7 +262,7 @@ int main(void) {
     /* getter tests */
 
     es_reset(errors);
-    print("\ngetter tests:");
+    print("\n~getter tests:");
 
         print("ca_size of int_array: %zu", ca_size(int_array));
         print("ca_size of NULL: %zu", ca_size(NULL));
@@ -275,14 +279,20 @@ int main(void) {
     /* clear test */
 
     es_reset(errors);
-    print("\nclear test:");
+    print("\n~clear test:");
 
         ca_clear(int_array);
 
     print_int_array(int_array);
 
+    print("\n#end");
+
+    /* end */
+
     ca_free(int_array);
     ca_free(empty_array);
     free(errors);
+
+    print("\nbye!");
 
 }

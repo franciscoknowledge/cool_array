@@ -1,190 +1,85 @@
-is the error printing stuff working ? 
+~pre start tests:
 no errors to print
-created arrays
-is the tiny_array NULL?: 1
+tiny_array == NULL: 1
 
-append test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_YAY
->CA_ERROR_NULL
->CA_ERROR_NULL
->CA_ERROR_OVERFLOW
--- int_array --
-[0] = 100
-[1] = 200
-
+~append test:
+errors: [0,0,1,1,4]
+int array: [100,200]
 size: 2
 capacity: 2
 last index: 1
 is empty: 0
-----
 
-set test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_YAY
->CA_ERROR_INDEX
->CA_ERROR_INDEX
->CA_ERROR_NULL
->CA_ERROR_NULL
--- int_array --
-[0] = 9000
-[1] = 9500
-
+~set test:
+errors: [0,0,2,2,1,1]
+int array: [9000,9500]
 size: 2
 capacity: 2
 last index: 1
 is empty: 0
-----
 
-insert test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_YAY
->CA_ERROR_INDEX
->CA_ERROR_NULL
->CA_ERROR_NULL
--- int_array --
-[0] = 9000
-[1] = 9000
-[2] = 9500
-[3] = 400
-
+~insert test:
+errors: [0,0,2,1,1]
+int array: [9000,9000,9500,400]
 size: 4
 capacity: 4
 last index: 3
 is empty: 0
-----
 
-remove test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_YAY
->CA_ERROR_INDEX
->CA_ERROR_NULL
--- int_array --
-[0] = 9000
-[1] = 9500
-
+~remove test:
+errors: [0,0,2,1]
+int array: [9000,9500]
 size: 2
 capacity: 4
 last index: 1
 is empty: 0
-----
 
-safe get test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_INDEX
->CA_ERROR_INDEX
->CA_ERROR_NULL
->CA_ERROR_NULL
--- int_array --
-[0] = 9000
-[1] = 9500
-
+~safe get test:
+errors: [0,2,2,1,1]
+int array: [9000,9500]
 size: 2
 capacity: 4
 last index: 1
 is empty: 0
-----
 
-swap test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_INDEX
->CA_ERROR_INDEX
->CA_ERROR_NULL
--- int_array --
-[0] = 9500
-[1] = 9000
-
+~swap test:
+errors: [0,2,2,1]
+int array: [9500,9000]
 size: 2
 capacity: 4
 last index: 1
 is empty: 0
-----
 
-reverse test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_NULL
--- int_array --
-[0] = 9000
-[1] = 9500
-
+~reverse test:
+errors: [0,1]
+int array: [9000,9500]
 size: 2
 capacity: 4
 last index: 1
 is empty: 0
-----
 
-resize test:
--- int_array --
-[0] = 9000
-[1] = 9500
-[2] = 0
-[3] = 0
-[4] = 0
-[5] = 0
-[6] = 0
-[7] = 0
-[8] = 0
-[9] = 0
-[10] = 0
-[11] = 0
-[12] = 0
-[13] = 0
-[14] = 0
-[15] = 0
-[16] = 0
-[17] = 0
-[18] = 0
-[19] = 0
-
+~resize test:
+int array: [9000,9500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 size: 20
 capacity: 20
 last index: 19
 is empty: 0
-----
-errors:
->CA_ERROR_YAY
->CA_ERROR_YAY
->CA_ERROR_NULL
->CA_ERROR_OVERFLOW
->CA_ERROR_ALLOC_FAIL
--- int_array --
-[0] = 9000
-[1] = 9500
-[2] = 0
-[3] = 0
-[4] = 0
-
+errors: [0,0,1,4,3]
+int array: [9000,9500,0,0,0]
 size: 5
 capacity: 20
 last index: 4
 is empty: 0
-----
 
-trim test:
-errors:
->CA_ERROR_YAY
->CA_ERROR_NULL
--- int_array --
-[0] = 9000
-[1] = 9500
-[2] = 0
-[3] = 0
-[4] = 0
-
+~trim test:
+errors: [0,1]
+int array: [9000,9500,0,0,0]
 size: 5
 capacity: 5
 last index: 4
 is empty: 0
-----
 
-getter tests:
+~getter tests:
 ca_size of int_array: 5
 ca_size of NULL: 0
 ca_capacity of int_array: 5
@@ -192,24 +87,19 @@ ca_capacity of NULL: 0
 ca_is_empty with int_array: 0 
 ca_is_empty with empty array: 1 
 ca_is_empty with NULL: 1 
--- int_array --
-[0] = 9000
-[1] = 9500
-[2] = 0
-[3] = 0
-[4] = 0
-
+int array: [9000,9500,0,0,0]
 size: 5
 capacity: 5
 last index: 4
 is empty: 0
-----
 
-clear test:
--- int_array --
-
+~clear test:
+int array: []
 size: 0
 capacity: 5
 last index: 0
 is empty: 1
-----
+
+#end
+
+bye!
